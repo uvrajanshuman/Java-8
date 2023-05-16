@@ -369,3 +369,9 @@ Another consideration is that when you pass around a lambda expression and it es
 while the current thread is updating the same local variable, concurrency issues can arise.
 
 To prevent such situations, the modification of local variables refereed by lambda expressions prohibited.
+
+**Customized sorting using lambdas**:<br>
+[Example: Custom sorting of List using Lambda expression](./custom_sorting/ListCustomSortingExample.java) <br>
+[Example: Custom sorting of Set using Lambda expression](./custom_sorting/SetCustomSortingExample.java) <br>
+[Example: Custom sorting of Map using Lambda expression](./custom_sorting/MapCustomSortingExample.java) <br>
+[Example: Custom sorting of a class objects using Lambda expression](./custom_sorting/CustomObjectCustomizedSortingExample.java)
