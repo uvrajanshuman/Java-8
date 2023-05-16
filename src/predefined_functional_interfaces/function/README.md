@@ -42,7 +42,7 @@ public interface Function<T, R> {
 ```java
 public class App {
     public static void main(String[] args) {
-        System.out.println(App.findLength("Anshuman"));
+        System.out.println(App.findLength("RAnshuman"));
     }
 
     public static int findLength(String s) {
