@@ -378,3 +378,96 @@ List<String> computerScienceStudents = Student.getAllStudents().stream()
 [Example: debugging using peek](./PeekExample.java)<br>
 [Example: performing operation on stream using peek](./PeekExample2.java)
 
+### filter
+
+`Stream<T> filter(Predicate<? super T> predicate)`
+
+- This is an intermediate operation.
+- Returns a new stream consisting of the elements of the given stream that match the supplied predicate.
+- It is used to selectively include or exclude elements from a stream based on a specified condition or predicate. 
+It allows to process only those elements that satisfy the given condition, while discarding the rest.
+
+[Example: To filter out even numbers from a list](./FilterExample1.java)
+
+```java
+import java.util.Arrays;
+import java.util.stream.Collectors;
+  
+public class App {
+  public static void main(String[] args) {
+    List<Integer> numbersList = Arrays.asList(10, 15, 20, 25);
+    
+    List<Integer>evenNumbersList = numbersList.stream()
+                                    .filter(i -> i % 2 == 0)
+                                    .collect(Collectors.toList());
+    System.out.println("Even numbers in the list: "+evenNumbersList);
+  }
+} 
+```
+Output:
+```shell
+Even numbers in the list: [10, 20]
+```
+
+[Example: Filter student data based on different conditions](./FilterExample2.java)
+<details>
+  <summary>click to expand/collapse</summary>
+
+```java
+import streams.data.Student;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class App {
+    //filter all male students
+    public static List<Student> getAllMaleStudents() {
+        List<Student> maleStudents = Student.getAllStudents().stream()
+                .filter(student -> student.getGender().equals("Male"))
+                .collect(Collectors.toList());
+        return maleStudents;
+    }
+
+    //filter all female students
+    public static List<Student> getAllFemaleStudents() {
+        List<Student> femaleStudents = Student.getAllStudents().stream()
+                .filter(student -> student.getGender().equals("Female"))
+                .collect(Collectors.toList());
+
+        return femaleStudents;
+    }
+
+    //filter all student who participate in coding club or photography club
+    public static List<Student> getAllCodingOrPhotographyClubStudents() {
+        List<Student> codingOrPhotographyStudents = Student.getAllStudents().stream()
+                .filter(student ->
+                        student.getActivities().contains("Coding Club")
+                                || student.getActivities().contains("Photography")).collect(Collectors.toList());
+        return codingOrPhotographyStudents;
+    }
+
+    public static String getStudentNames(List<Student> students) {
+        String names = students.stream()
+                .map(Student::getName)
+                .collect(Collectors.joining(",", "[", "]"));
+        return names;
+    }
+    public static void main(String[] args) {
+        List<Student> maleStudents = getAllMaleStudents();
+        List<Student> femaleStudents = getAllFemaleStudents();
+        List<Student> codingOrPhotographyStudents = getAllCodingOrPhotographyClubStudents();
+
+        System.out.println("Male Students: "+getStudentNames(maleStudents));
+        System.out.println("Female Students: "+getStudentNames(femaleStudents));
+        System.out.println("Coding or Photography Students: "+getStudentNames(codingOrPhotographyStudents));
+    }
+}
+
+```
+Output:
+```shell
+Male Students: [Aarav,Rohan,Sahil,Rohan,Rishi,Aryan,Aryan,Ved,Varun,Arjun,Karan,Ravi,Raj,Rahul]
+Female Students: [Isha,Ishita,Sia,Nisha,Kavya,Anika,Neha,Tanvi,Diya,Prachi,Diya]
+Coding or Photography Students: [Aarav,Rohan,Isha,Ishita,Sahil,Rohan,Sia,Aryan,Varun,Arjun,Kavya,Ravi]
+```
+</details>
