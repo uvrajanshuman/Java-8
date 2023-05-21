@@ -603,3 +603,42 @@ Output:
 Student Activities: [Photography, Coding Club, Art, Music, Dance, Debate Club, Guitar Club, Robotics Club, Sports]
 ```
 </details>
+
+### distinct 
+
+`Stream<T> distinct()`
+
+- This is a stateful intermediate operation.
+- Returns a stream consisting of the distinct elements (according to Object.equals(Object)) of this stream.
+- Returns a stream with unique elements
+
+[Example: To get all distinct activities performed by students](./DistinctExample.java)
+<details>
+  <summary>click to expand/collapse</summary>
+
+```java
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class DistinctExample {
+
+    //get a list all the unique/distinct activities
+    private static List<String> getAllDistinctActivities() {
+        return Student.getAllStudents()
+                .stream()
+                .map(Student::getActivities)
+                .flatMap(List::stream)
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
+    public static void main(String[] args) {
+        System.out.println("Student activities: "+getAllDistinctActivities());
+    }
+}
+```
+Output:
+```shell
+Student activities: [Sports, Coding Club, Music, Photography, Art, Dance, Debate Club, Robotics Club, Guitar Club]
+```
+</details>
