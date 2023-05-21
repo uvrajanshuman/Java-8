@@ -350,3 +350,31 @@ Stream<Integer> randomIntStream = Stream.generate(intSupplier);
 [Example: Stream Factory Methods](./StreamFactoryMethodsExample.java)
 
 ---
+
+## Stream Operations:
+
+### peek
+
+`Stream<T> peek(Consumer<? super T> action)`
+
+- This is an intermediate operation.
+- Returns a stream consisting of the elements of the provided stream, additionally performing the provided action on each
+  element as elements are consumed from the resulting stream.
+- It accepts a consumer and is basically used to apply a operation on the stream.
+- It is mostly used for printing, logging, or debugging without changing the elements or the order of the stream.<br>
+ but can also be used to perform operations instead.
+
+Example:
+- to get view of what is being passed from one operation to another in previous [example](#stream-pipeline-demonstration)
+```java
+List<String> computerScienceStudents = Student.getAllStudents().stream()
+        .peek(System.out::println) // prints the stream at this position
+        .filter(student -> student.getDepartment().equals("Computer Science"))
+        .peek(System.out::println) // prints the stream at this position (after filter operation)
+        .map(Student::getName)
+        .peek(System.out::println) // prints the stream at this position (after map operation)
+        .collect(Collectors.toList());
+```
+[Example: debugging using peek](./PeekExample.java)<br>
+[Example: performing operation on stream using peek](./PeekExample2.java)
+
