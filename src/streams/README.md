@@ -414,8 +414,6 @@ Even numbers in the list: [10, 20]
   <summary>click to expand/collapse</summary>
 
 ```java
-import streams.data.Student;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -469,5 +467,67 @@ Output:
 Male Students: [Aarav,Rohan,Sahil,Rohan,Rishi,Aryan,Aryan,Ved,Varun,Arjun,Karan,Ravi,Raj,Rahul]
 Female Students: [Isha,Ishita,Sia,Nisha,Kavya,Anika,Neha,Tanvi,Diya,Prachi,Diya]
 Coding or Photography Students: [Aarav,Rohan,Isha,Ishita,Sahil,Rohan,Sia,Aryan,Varun,Arjun,Kavya,Ravi]
+```
+</details>
+
+### map 
+
+`<R> Stream<R> map(Function<? super T,? extends R> mapper)`
+
+- This is an intermediate operation.
+- Returns a new stream consisting of the results of applying the supplied Function to the elements of the given stream.
+- It performs operation on every element of stream and converts/transforms them from one type to another.
+
+[Example: To transform the list of string to uppercase](./MapExample1.java)
+
+```java
+import java.util.Arrays;
+
+public class App {
+  public static void main(String[] args) {
+    List<String> transportationModes = Arrays.asList("bus","car","bi-cycle","train","flights");
+    transportationModes.stream()
+            .map(String::toUpperCase)
+            .forEach(System.out::println);
+  }
+} 
+```
+Output:
+```shell
+BUS
+CAR
+BI-CYCLE
+TRAIN
+FLIGHTS
+```
+
+[Example: To get all Student names](./MapExample2.java)
+
+<details>
+  Abc
+  <summary>click to expand/collapse</summary>
+
+```java
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class App {
+    //get student names
+    private static List<String> getStudentNames() {
+        List<String> names = Student.getAllStudents().stream()
+                .map(Student::getName)
+                .collect(Collectors.toList());
+        return names;
+    }
+
+    public static void main(String[] args) {
+        System.out.println("Student Names: " + getStudentNames());
+    }
+}
+
+```
+Output:
+```shell
+ Student Names: [Aarav, Rohan, Isha, Ishita, Sahil, Rohan, Sia, Rishi, Aryan, Aryan, Ved, Varun, Nisha, Arjun, Kavya, Karan, Anika, Neha, Ravi, Tanvi, Diya, Raj, Rahul, Prachi, Diya]
 ```
 </details>
