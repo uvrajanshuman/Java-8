@@ -531,3 +531,75 @@ Output:
  Student Names: [Aarav, Rohan, Isha, Ishita, Sahil, Rohan, Sia, Rishi, Aryan, Aryan, Ved, Varun, Nisha, Arjun, Kavya, Karan, Anika, Neha, Ravi, Tanvi, Diya, Raj, Rahul, Prachi, Diya]
 ```
 </details>
+
+### flatMap 
+
+`Stream<R> flatMap(Function<? super T,? extends Stream<? extends R>> mapper)`
+
+- This is an intermediate operation.
+- It is used to flatten a stream of collections or arrays into a single stream of elements. 
+It applies a function to each element in the stream and flattens the resulting collections or arrays into a single stream.
+- converts/transforms one type to another like map(), but
+used in context of Stream where each element in the stream represents multiple elements.
+Ex: Stream\<List>, Stream\<Arrays>
+
+The flatMap method is typically used when you have a stream of nested collections or arrays and want to work with the individual elements within them, rather than the nested structures themselves.
+
+[Example: Flattening a list containing multiple sub-lists](./FlatMapExample1.java)
+```java
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class App {
+  public static void main(String[] args) {
+      List<Integer> subList1 = Arrays.asList(1, 2);
+      List<Integer> subList2 = Arrays.asList(3, 4);
+      List<Integer> subList3 = Arrays.asList(5, 6);
+
+      // List containing multiple sublists
+      List<List<Integer>> list = Arrays.asList(subList1, subList2, subList3);
+
+      //Flattening the sublists into a single list
+      List<Integer> collectedList = list.stream() // Stream<List<Integer>>
+              .flatMap(l -> l.stream()) // Stream<Integer>
+              .collect(Collectors.toList()); // List<Integer>
+
+      System.out.println("Flattened List: "+collectedList);
+  }
+}
+```
+Output:
+```shell
+Flattened List: [1, 2, 3, 4, 5, 6]
+```
+
+[Example: To get all the activities performed by students](./FilterExample2.java)
+<details>
+  <summary>click to expand/collapse</summary>
+
+```java
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+public class App {
+    // to collect all the activities of all the students
+    private static Set<String> getAllActivities() {
+        return Student.getAllStudents() // List<Student>
+                .stream() // Stream<Student>
+                .map(Student::getActivities) // Stream<List<String>>
+                .flatMap(List::stream) // Stream<String>
+                .collect(Collectors.toSet());
+    }
+
+    public static void main(String[] args) {
+        System.out.println("Student Activities: "+getAllActivities());
+    }
+}
+```
+Output:
+```shell
+Student Activities: [Photography, Coding Club, Art, Music, Dance, Debate Club, Guitar Club, Robotics Club, Sports]
+```
+</details>
