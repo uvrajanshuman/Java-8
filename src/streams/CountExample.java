@@ -1,5 +1,8 @@
 package streams;
 
+/*
+ * Example demonstrating Stream method: count
+ */
 import streams.data.Student;
 
 import java.util.List;

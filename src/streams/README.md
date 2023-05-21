@@ -687,3 +687,85 @@ Total activities count: 50
 CSE students count: 5
 ```
 </details>
+
+### sorted 
+
+`Stream<T> sorted()`
+
+- This is a stateful intermediate operation.
+- Returns a stream consisting of the elements of this stream, sorted according to **natural order**.
+- If the elements of this stream are not Comparable,
+  a `java.lang.ClassCastException` will be thrown when the terminal operation is executed.
+
+[Example: sort a list of string (natural-order sorting)](./SortedExample2.java)
+```java
+import java.util.Arrays;
+import java.util.List;
+
+public class SortedExample {
+    public static void main(String[] args) {
+        List<String> fruits = Arrays.asList("Apple", "Orange", "Banana", "Mango", "Pineapple");
+
+        System.out.println("Original List: " + fruits);
+
+        List<String> sortedFruits = fruits.stream()
+                .sorted()
+                .toList();
+
+        System.out.println("Sorted Fruits: " + sortedFruits);
+    }
+}
+```
+Output:
+```shell
+Original List: [Apple, Orange, Banana, Mango, Pineapple]
+ * Sorted Fruits: [Apple, Banana, Mango, Orange, Pineapple]
+```
+
+### sorted 
+
+`Stream<T> sorted(Comparator<? super T> comparator)`
+
+- This is a stateful intermediate operation.
+- Returns a stream consisting of the elements of this stream, sorted according to the provided **Comparator**.
+- If the elements of this stream are not Comparable, a `java.lang.ClassCastException` will be thrown
+  when the terminal operation is executed.
+
+[Exampe: sorting students based on their names (custom-sorting)](./SortedExample.java)
+<details>
+  Abc
+  <summary>click to expand/collapse</summary>
+
+```java
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class SortedExample {
+    //sort all students by name
+    private static List<Student> sortStudentsByName() {
+        return Student.getAllStudents()
+                .stream()
+//                .sorted((student1, student2) -> student1.getName().compareTo(student2.getName()))
+                .sorted(Comparator.comparing(Student::getName))
+                .collect(Collectors.toList());
+    }
+
+    private static String getStudentNames(List<Student> students){
+        return students.stream()
+                .map(Student::getName)
+                .collect(Collectors.joining(",","[","]"));
+    }
+
+    public static void main(String[] args) {
+        List<Student> studentsSortedByName = sortStudentsByName();
+        System.out.println("Students sorted by name: "+getStudentNames(studentsSortedByName));
+    }
+}
+
+```
+Output:
+```shell
+Students sorted by name: [Aarav,Anika,Arjun,Aryan,Aryan,Diya,Diya,Isha,Ishita,Karan,Kavya,Neha,Nisha,Prachi,Rahul,Raj,Ravi,Rishi,Rohan,Rohan,Sahil,Sia,Tanvi,Varun,Ved]
+```
+</details>
