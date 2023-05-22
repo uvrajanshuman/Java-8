@@ -1282,3 +1282,12 @@ Find First: Rishi
 Find Any: Rishi
 ```
 </details>
+
+
+### collect
+- The collect() method takes in an input of type **Collector**.
+- produces the result as per the input passed to the collect() method.
+- It works like an accumulator that is going to accumulate the result until the stream is exhausted. 
+
+[Collectors](./collectors/README.md) is the implementation of **Collector** interface that provides various useful 
+reduction operations, such as accumulating elements into collections, summarizing elements according to various criteria, etc.
