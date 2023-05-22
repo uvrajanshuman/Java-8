@@ -981,3 +981,75 @@ Output:
 Minimum element in the list: 1
 Maximum element in the list: 6
 ```
+
+### limit 
+
+`Stream<T> limit(long maxSize)`
+
+- This is a short-circuiting stateful intermediate operation.
+- Helps to create a sub-stream.
+- Returns a stream consisting of the elements of this stream, truncated to be no longer than **maxSize** in length.
+- **maxSize** - the number of elements the returned stream should be limited to.
+- **limit(n)** : limits the **n** no. of elements to be processed in the stream.
+
+[Example: sum of first three numbers of an integer list](./LimitAndSkipExample.java)
+
+```java
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
+public class App {
+  public static void main(String[] args) {
+    List<Integer> integerList = Arrays.asList(1, 2, 3, 4, 5, 6);
+    Optional<Integer> firstThreeSum = integerList
+            .stream() // Stream<Integer> // all integers of integerList.
+            .limit(3) // Stream<Integer> // limited to first three integers of integerList.
+            .reduce(Integer::sum);
+
+      firstThreeSum.ifPresent(integer -> System.out.println("Sum: " + integer));
+  }
+}
+```
+Output:
+```shell
+Sum: 6
+```
+
+[Example: limit stream factory method `generate` and `iterate`](./StreamFactoryMethodsExample.java)
+
+### skip 
+
+`Stream<T> skip(long n)`
+
+- This is a stateful intermediate operation.
+- Helps to create a sub-stream
+- Returns a stream consisting of the remaining elements of this stream after discarding the first **n** elements of the stream.
+- If this stream contains fewer than n elements then an empty stream will be returned.
+- **n** - the number of leading elements to skip
+- **skip(n)** : skips the "n" no of elements from the stream.
+
+[Example: skip first three numbers of a integer list and find sum of remaining](./LimitAndSkipExample.java)
+
+```java
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
+public class App {
+  public static void main(String[] args) {
+    List<Integer> integerList = Arrays.asList(1, 2, 3, 4, 5, 6);
+    Optional<Integer> skipThreeSum = integerList
+            .stream() // Stream<Integer> // all integers of integerList.
+            .skip(3) // Stream<Integer> // first three integers of integerList will be skipped..
+            .reduce(Integer::sum);
+
+      skipThreeSum.ifPresent(integer -> System.out.println("Sum: " + integer));
+  }
+}
+```
+Output:
+```shell
+Sum: 15
+```
+
