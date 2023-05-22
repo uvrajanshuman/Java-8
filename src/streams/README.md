@@ -1053,3 +1053,171 @@ Output:
 Sum: 15
 ```
 
+
+### anyMatch
+
+`boolean anyMatch(Predicate<? super T> predicate)`
+
+- This is a short-circuiting terminal operation.
+- Takes a predicate as an input and returns a boolean result.
+- Checks whether any elements of this stream match the provided predicate.
+- Returns true if any one of the element matches the predicate, otherwise false
+- May not evaluate the predicate on all elements if not necessary for determining the result.
+  (ex: if an element satisfies the predicate condition, the next elements won't be evaluated for the predicate; directly true will be returned)<br>
+That's why this is a short-circuiting operation.
+- If the stream is empty then false is returned and the predicate is not evaluated.
+
+### allMatch 
+
+`boolean allMatch(Predicate<? super T> predicate)`
+
+- This is a short-circuiting terminal operation.
+- Takes a predicate as an input and returns a boolean result.
+- Checks whether all elements of this stream match the provided predicate.
+- Returns true if all the element matches the predicate, otherwise false
+- May not evaluate the predicate on all elements if not necessary for determining the result.
+  (ex: if an element does not satisfy the predicate, the next elements won't be evaluated for the predicate; directly false will be returned)<br>
+  That's why this is a short-circuiting operation.
+- If the stream is empty then true is returned and the predicate is not evaluated.
+
+### noneMatch 
+
+`boolean noneMatch(Predicate<? super T> predicate)`
+
+- This is a short-circuiting terminal operation.
+- Takes a predicate as an input and returns a boolean result.
+- Returns true if none of the element matches the predicate, otherwise false
+- Returns whether no elements of this stream match the provided predicate.
+- May not evaluate the predicate on all elements if not necessary for determining the result.
+  (ex: if an element satisfies the predicate condition, the next elements won't be evaluated for the predicate; directly false will be returned)<br>
+  That's why this is a short-circuiting operation.
+- If the stream is empty then true is returned and the predicate is not evaluated.
+- Just opposite of allMatch()
+
+
+[Example: anyMatch(), allMatch(), noneMatch()](./AnyMatchAllMatchNoneMatchExample1.java)
+```java
+/*
+ * Example demonstrating Stream methods: anyMatch(), allMatch() and noneMatch()
+ */
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Predicate;
+
+public class AnyMatchAllMatchNoneMatchExample {
+    private static final Predicate<Integer> isEven = integer -> integer % 2 == 0;
+
+    //allMatch() demo
+    private static boolean checkIfAllEven(List<Integer> list){
+        return list.stream()
+                .allMatch(isEven);
+    }
+
+    //anyMatch() demo
+    private static boolean checkIfAnyEven(List<Integer> list){
+        return list.stream()
+                .anyMatch(isEven);
+    }
+
+    //noneMatch() demo
+    private static boolean checkIfNoneEven(List<Integer> list){
+        return list.stream()
+                .noneMatch(isEven);
+    }
+
+    public static void main(String[] args) {
+        List<Integer> mixedList = Arrays.asList(1,2,3,4,5,6,7,8,9,10);
+        List<Integer> evenList = Arrays.asList(2,4,6,8,10);
+        List<Integer> oddList = Arrays.asList(1,3,5,7,9);
+
+        System.out.println("All match demo for mixedList: "+checkIfAllEven(mixedList)); // false
+        System.out.println("All match demo for evenList: "+checkIfAllEven(evenList)); // true
+        System.out.println("All match demo for oddList: "+checkIfAllEven(oddList)); // false
+        System.out.println();
+        System.out.println("Any match demo for mixedList: "+checkIfAnyEven(mixedList)); // true
+        System.out.println("Any match demo for evenList: "+checkIfAnyEven(evenList)); // true
+        System.out.println("Any match demo for oddList: "+checkIfAnyEven(oddList)); // false
+        System.out.println();
+        System.out.println("None match demo for mixedList: "+checkIfNoneEven(mixedList)); // false
+        System.out.println("None match demo for evenList: "+checkIfNoneEven(evenList)); // false
+        System.out.println("None match demo for oddList: "+checkIfNoneEven(oddList)); // true
+
+    }
+}
+```
+Output:
+```shell
+All match demo for mixedList: false
+All match demo for evenList: true
+All match demo for oddList: false
+
+Any match demo for mixedList: true
+Any match demo for evenList: true
+Any match demo for oddList: false
+
+None match demo for mixedList: false
+None match demo for evenList: false
+None match demo for oddList: true
+```
+[Example: anyMatch, allMatch and noneMatch on Student data](./AnyMatchAllMatchNoneMatchExample2.java)
+<details>
+  <summary>click to expand/collapse</summary>
+
+```java
+import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+public class AnyMatchAllMatchNoneMatchExample {
+
+    // anyMatch
+    private static boolean anyMatch(List<Student> students, Predicate<Student> predicate){
+        return students.stream()
+                .anyMatch(predicate);
+    }
+
+    // allMatch
+    private static boolean allMatch(List<Student> students, Predicate<Student> predicate){
+        return students.stream()
+                .allMatch(predicate);
+    }
+
+    // noneMatch
+    private static boolean noneMatch(List<Student> students, Predicate<Student> predicate) {
+        return students.stream()
+                .noneMatch(predicate);
+    }
+
+    public static void main(String[] args) {
+        List<Student> itStudents = Student.getAllStudents().stream()
+                .filter(student -> student.getDepartment().equals("Information Technology"))
+                .collect(Collectors.toList());
+
+        List<Student> cseStudents = Student.getAllStudents().stream()
+                .filter(student -> student.getDepartment().equals("Computer Science"))
+                .collect(Collectors.toList());
+
+        List<Student> civilStudents = Student.getAllStudents().stream()
+                .filter(student -> student.getDepartment().equals("Civil Engineering"))
+                .collect(Collectors.toList());
+
+        Predicate<Student> codingClub = student -> student.getActivities().contains("Coding Club");
+
+        //to check if any Information Technology student participates in coding club
+        System.out.println("Any Information Technology student participates in coding club: "+anyMatch(itStudents,codingClub));
+        //to check whether all the computer science student participate in coding club
+        System.out.println("All Computer Science students participate in coding club: "+allMatch(cseStudents,codingClub));
+        //to check if none of the Civil Engineering student participate in coding club
+        System.out.println("None of the Civil Engineering students participate in coding club: "+noneMatch(civilStudents,codingClub));
+    }
+}
+
+```
+Output:
+```shell
+Any Information Technology student participates in coding club: true
+All Computer Science students participate in coding club: true
+None of the Civil Engineering students participate in coding club: true
+```
+</details>
