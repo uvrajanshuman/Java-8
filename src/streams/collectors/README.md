@@ -99,3 +99,37 @@ Output:
 All available activities: [Photography, Coding Club, Art, Music, Dance, Debate Club, Guitar Club, Robotics Club, Sports]
 ```
 </details>
+
+### toMap
+
+`public static <T,K,U> Collector<T,?,Map<K,U>> toMap(Function<? super T,? extends K> keyMapper, Function<? super T,? extends U> valueMapper)`
+
+- Returns a Collector that accumulates elements into a Map whose keys and values are the result of applying the provided mapping functions to the input elements.
+- If the mapped keys contains duplicates (according to Object.equals(Object)), an **IllegalStateException** is thrown when the collection operation is performed. 
+
+[Example: toMap](./ToMapExample.java)
+<details>
+  <summary>click to expand/collapse</summary>
+
+```java
+import java.util.Map;
+import java.util.stream.Collectors;
+
+public class ToMapExample {
+
+    //get student roll and name map
+    private static Map<Integer, String> getStudentRollNamesMap() {
+        return Student.getAllStudents()
+                .stream()
+                .collect(Collectors.toMap(Student::getRollNo,Student::getName));
+    }
+    public static void main(String[] args) {
+        System.out.println("Student Roll and Name: "+getStudentRollNamesMap());
+    }
+}
+```
+Output:
+```shell
+ Student Roll and Name: {201=Rohan, 202=Sia, 203=Rishi, 204=Aryan, 401=Arjun, 402=Kavya, 403=Karan, 404=Anika, 601=Raj, 602=Rahul, 603=Prachi, 604=Diya, 101=Aarav, 102=Rohan, 103=Isha, 104=Ishita, 105=Sahil, 301=Aryan, 302=Ved, 303=Varun, 304=Nisha, 501=Neha, 502=Ravi, 503=Tanvi, 504=Diya}
+```
+</details>
