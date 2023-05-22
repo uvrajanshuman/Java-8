@@ -249,3 +249,37 @@ Joining2: Mango,Apple,Watermelon
 Joining3: [Mango_Apple_Watermelon]
 ```
 </details>
+
+## counting
+
+`public static <T> Collector<T,?,Long> counting()`
+- Returns a Collector accepting elements of type T that counts the number of input elements.
+- If no elements are present, the result is 0.
+- returns the total number elements as a result.
+
+[Example: counting](./CountingExample.java)
+<details>
+  <summary>click to expand/collapse</summary>
+
+```java
+import java.util.stream.Collectors;
+
+public class CountingExample {
+  //to get count of Computer Science students
+  private static long countCseStudents(){
+    return Student.getAllStudents()
+            .stream()
+            .filter(student -> student.getDepartment().equals("Computer Science"))
+            .collect(Collectors.counting());
+    // can also be replaced with just .count
+  }
+  public static void main(String[] args) {
+    System.out.println("No. of CSE students: "+countCseStudents());
+  }
+}
+```
+Output:
+```shell
+No. of CSE students: 5
+```
+</details>
