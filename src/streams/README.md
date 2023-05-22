@@ -1221,3 +1221,64 @@ All Computer Science students participate in coding club: true
 None of the Civil Engineering students participate in coding club: true
 ```
 </details>
+
+### findFirst 
+
+Optional.OptionalExample<T> findFirst()
+
+- This is a short-circuiting terminal operation.
+- Returns an Optional describing the first element of this stream, or an empty Optional if the stream is empty.
+- Returns the first element in the stream.
+
+### findAny 
+
+Optional.OptionalExample<T> findAny()
+- This is a short-circuiting terminal operation.
+- Returns an Optional describing some element of the stream, or an empty Optional if the stream is empty.
+- Returns the first encountered element in the stream.
+
+
+> The difference b/w findFirst(), findAny() and allMatch(), anyMatch(), noneMatch() is that they returned a boolean
+>result while these return the actual object enclosed in Optional.OptionalExample.
+
+> findFirst() and findAny() do not make much difference in normal stream but makes a lot of difference in parallel stream.
+
+[Example: findFirst, findAny](./FindFirstFindAnyExample.java)
+<details>
+  <summary>click to expand/collapse</summary>
+
+```java
+import java.util.Optional;
+
+public class FindFirstFindAnyExample {
+    // will return first encountered Student with activity as Robotics Club
+    private static Optional<Student> findAny(){
+        return Student.getAllStudents()
+                .stream()
+                .filter(student -> student.getActivities().contains("Robotics Club"))
+                .findAny();
+    }
+
+    // will return first encountered Student with activity as Robotics Club
+    private static Optional<Student> findFirst(){
+        return Student.getAllStudents()
+                .stream()
+                .filter(student -> student.getActivities().contains("Robotics Club"))
+                .findFirst();
+    }
+
+    public static void main(String[] args) {
+        Optional<Student> findFirstResult = findFirst();
+        findFirstResult.ifPresent(student -> System.out.println("Find First: "+student.getName()));
+
+        Optional<Student> findAnyResult = findAny();
+        findAnyResult.ifPresent(student -> System.out.println("Find Any: "+student.getName()));
+    }
+}
+```
+Output:
+```shell
+Find First: Rishi
+Find Any: Rishi
+```
+</details>
