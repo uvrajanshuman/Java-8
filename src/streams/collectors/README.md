@@ -184,3 +184,68 @@ Sahil
 
 ```
 </details>
+
+## joining
+
+- Returns a Collector that concatenates the input elements into a String, in encounter order.
+- joining has three different overloaded versions.
+
+### public static Collector<CharSequence,?,String> joining()`
+- Returns a Collector that concatenates the input elements into a String, in encounter order.
+
+### `public static Collector<CharSequence,?,String> joining(CharSequence delimiter)`
+- Returns a Collector that concatenates the input elements into a string,
+  separated by the specified delimiter, in encounter order.
+
+### `public static Collector<CharSequence,?,String> joining(CharSequence delimiter,CharSequence prefix,CharSequence suffix)`
+- Returns a Collector that concatenates the input elements,
+  separated by the specified delimiter, with the specified prefix and suffix, in encounter order.
+
+[Example: joining methods](./JoiningExample.java)
+<details>
+  <summary>click to expand/collapse</summary>
+
+```java
+/*
+ * Example demonstrating Collectors method: joining and its overloaded versions
+ */
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class JoiningExample {
+
+    // joining
+    private static String joining(List<String> list) {
+        return list.stream()
+                .collect(Collectors.joining());
+    }
+
+    //joining(delimiter)
+    private static String joiningWithDelimiter(List<String> list) {
+        return list.stream()
+                .collect(Collectors.joining(","));
+    }
+
+    //joining(delimiter, prefix, suffix)
+    private static String joiningWithDelimiterAndPrefixSuffix(List<String> list) {
+        return list.stream()
+                .collect(Collectors.joining("_", "[", "]"));
+    }
+
+    public static void main(String[] args) {
+        List<String> fruits = Arrays.asList("Mango", "Apple", "Watermelon");
+        System.out.println("Joining1: " + joining(fruits));
+        System.out.println("Joining2: " + joiningWithDelimiter(fruits));
+        System.out.println("Joining3: " + joiningWithDelimiterAndPrefixSuffix(fruits));
+    }
+}
+```
+Output:
+```shell
+Joining1: MangoAppleWatermelon
+Joining2: Mango,Apple,Watermelon
+Joining3: [Mango_Apple_Watermelon]
+```
+</details>
