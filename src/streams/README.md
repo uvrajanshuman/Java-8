@@ -940,3 +940,44 @@ Sum without identity: Empty list, not able to perform sum
 ```
 </details>
 
+### max 
+
+`Optional.OptionalExample<T> max(Comparator<? super T> comparator)`
+
+- This is a terminal operation.
+- Returns the maximum element of this stream according to the provided Comparator.
+- This is a special case of a reduction.
+
+### min 
+
+`Optional.OptionalExample<T> min(Comparator<? super T> comparator)`
+
+- This is a terminal operation.
+- Returns the minimum element of this stream according to the provided Comparator.
+- This is a special case of a reduction.
+
+[Example: To find minimum and maximum elements from the list](./MinMaxExample.java)
+
+```java
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+
+public class MinMaxExample {
+    public static void main(String[] args) {
+        List<Integer> integerList = Arrays.asList(1,2,3,4,5,6);
+        Optional<Integer> minElement = integerList.stream()
+                .min(Comparator.naturalOrder());
+        Optional<Integer> maxElement = integerList.stream()
+                .max(Comparator.naturalOrder());
+        minElement.ifPresent(integer -> System.out.println("Minimum element in the list: " + integer));
+        maxElement.ifPresent(integer -> System.out.println("Maximum element in the list: " + integer));
+    }
+}
+```
+Output:
+```shell
+Minimum element in the list: 1
+Maximum element in the list: 6
+```
