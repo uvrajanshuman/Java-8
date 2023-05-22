@@ -52,3 +52,50 @@ Ishita
 Sahil
 ```
 </details>
+
+### toSet
+
+`public static <T> Collector<T,?,Set<T>> toSet()`
+
+- Returns a Collector that accumulates the input elements into a new Set.
+- There are no guarantees on the type, mutability, serializability, or thread-safety of the Set returned;
+- if more control over the returned Set is required, use toCollection(Supplier).
+- This is an unordered Collector.
+
+[Example: toSet](./ToSetExample.java)
+<details>
+  <summary>click to expand/collapse</summary>
+
+```java
+package streams.collectors;
+
+/*
+ * Example demonstrating Collectors method: toList
+ */
+
+import streams.data.Student;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+public class ToSetExample {
+
+    //to retrieve all the available activities among students
+    private static Set<String> getAllActivities() {
+        return Student.getAllStudents() //List<Student>
+                .stream() //Stream<Student>
+                .map(Student::getActivities) //Stream<List<String>>
+                .flatMap(List::stream) //Stream<String>
+                .collect(Collectors.toSet());
+    }
+    public static void main(String[] args) {
+        System.out.println("All available activities: "+getAllActivities());
+    }
+}
+```
+Output:
+```shell
+All available activities: [Photography, Coding Club, Art, Music, Dance, Debate Club, Guitar Club, Robotics Club, Sports]
+```
+</details>
