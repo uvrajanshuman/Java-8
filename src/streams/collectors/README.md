@@ -133,3 +133,54 @@ Output:
  Student Roll and Name: {201=Rohan, 202=Sia, 203=Rishi, 204=Aryan, 401=Arjun, 402=Kavya, 403=Karan, 404=Anika, 601=Raj, 602=Rahul, 603=Prachi, 604=Diya, 101=Aarav, 102=Rohan, 103=Isha, 104=Ishita, 105=Sahil, 301=Aryan, 302=Ved, 303=Varun, 304=Nisha, 501=Neha, 502=Ravi, 503=Tanvi, 504=Diya}
 ```
 </details>
+
+### toCollection
+
+`public static <T,C extends Collection<T>> Collector<T,?,C> toCollection(Supplier<C> collectionFactory)`
+
+- Returns a Collector that accumulates the input elements into a new Collection, in encounter order.
+- The Collection is created by the provided factory.
+- Type Parameters:
+    - T - the type of the input elements
+    - C - the type of the resulting Collection
+- Parameters:
+    - collectionFactory - a Supplier which returns a new, empty Collection of the appropriate type
+- Returns:
+    - a Collector which collects all the input elements into a Collection, in encounter order
+
+[Example: toCollection](./ToCollectionExample.java)
+<details>
+  <summary>click to expand/collapse</summary>
+
+```java
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class ToCollectionExample {
+    //list of Computer Science students
+    private static List<Student> getAllComputerScienceStudents() {
+        return Student.getAllStudents()
+                .stream()
+                .filter(student -> student.getDepartment().equals("Computer Science"))
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public static void main(String[] args) {
+        List<Student> computerScienceStudents = getAllComputerScienceStudents();
+        System.out.println("Computer Science students: ");
+        computerScienceStudents.forEach(student -> System.out.println(student.getName()));
+    }
+}
+```
+Output:
+```shell
+Computer Science students:
+Aarav
+Rohan
+Isha
+Ishita
+Sahil
+
+```
+</details>
