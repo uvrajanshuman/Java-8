@@ -338,3 +338,69 @@ Names Set: [Isha, Rahul, Sahil, Ravi, Aarav, Kavya, Karan, Rishi, Varun, Sia, Ni
 Names List: [Aarav, Rohan, Isha, Ishita, Sahil, Rohan, Sia, Rishi, Aryan, Aryan, Ved, Varun, Nisha, Arjun, Kavya, Karan, Anika, Neha, Ravi, Tanvi, Diya, Raj, Rahul, Prachi, Diya]
 ```
 </details>
+
+### minBy
+
+`public static <T> Collector<T,?,Optional<T>> minBy(Comparator<? super T> comparator)`
+
+- Returns a Collector that produces the minimal element according to a given Comparator, described as an `Optional<T>`.
+
+The minBy collector takes a comparator as a parameter and returns an Optional object containing the minimum element according to the provided comparator. I
+If the stream is empty, the Optional will be empty as well.
+
+### maxBy
+
+`public static <T> Collector<T,?,Optional<T>> maxBy(Comparator<? super T> comparator)`
+
+- Returns a Collector that produces the maximal element according to a given Comparator, described as an `Optional<T>`.
+
+The maxBy collector also takes a comparator as a parameter and returns an Optional object containing the maximum element based on the comparator.
+If the stream is empty, the Optional will be empty.
+
+>The minBy and maxBy collectors in the Collectors class are used to find the minimum and maximum elements of a stream
+based on a specific comparator or natural order.
+
+[Example: minBy maxBy](./MinByMaxByExample.java)
+<details>
+  <summary>click to expand/collapse</summary>
+
+```java
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+public class MinByMaxByExample {
+    public static void main(String[] args) {
+        List<Integer> integerList = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+
+        Optional<Integer> maxElement = integerList
+                .stream()
+                .collect(Collectors.maxBy(Comparator.naturalOrder()));
+        /*
+         * Equivalent to:
+         * Optional<Integer> maxElement = integerList
+         *       .stream().max(Comparator.naturalOrder());
+         */
+
+        Optional<Integer> minElement = integerList
+                .stream()
+                .collect(Collectors.minBy(Comparator.naturalOrder()));
+        /*
+         * Equivalent to:
+         * Optional<Integer> minElement = integerList
+         *       .stream().min(Comparator.naturalOrder());
+         */
+
+        maxElement.ifPresent(integer -> System.out.println("Max element in list: " + integer)); // 10
+        minElement.ifPresent(integer -> System.out.println("Min element in list: " + integer)); // 1
+    }
+}
+```
+Output:
+```shell
+Max element in list: 10
+Min element in list: 1
+```
+</details>
