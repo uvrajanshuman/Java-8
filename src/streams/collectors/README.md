@@ -498,3 +498,208 @@ Average: 3.0
 ```
 averagingLong and averagingDouble collectors can be used in a similar way to calculate the average of long and double values, respectively.
 </details>
+
+## groupingBy
+
+The groupingBy method in the Collectors class is used to group elements of a stream based on a specific criterion.<br>
+It creates a Map where the keys are the distinct values of the grouping criterion, and the values are the elements that belong to each group.
+
+- Used to group the elements based on a property.
+- This method has a similar functionality to the **GROUP BY** statement in SQL.
+- groupingBy has three overloaded versions to provide flexibility in defining the grouping criterion and downstream collectors.
+- The output of the groupingBy() is going to be a Map<K,V>
+
+### Collectors.groupingBy() with single attribute (classification function)
+
+`public static <T,K> Collector<T,?,Map<K,List<T>>> groupingBy(Function<? super T,? extends K> classifier)`
+
+This version takes a classifier function that extracts a key from each element of the stream. The elements are then grouped based on the extracted keys.
+
+- This method returns a Collector that groups the input elements of type T according to the classification function,
+  and returns the result in a Map.
+- The classification function maps elements to a key of type K.
+- The collector makes a Map<K, List<T>>, whose keys are the values resulting from applying the
+  classification function on the input elements.
+- The classifier function defines the keys for the resulting map.<br>
+The values of those keys are Lists containing the input elements which map to the associated key.
+
+[Example: groupingBy(classfierFn)](./GroupingByExample1.java)
+<details>
+  <summary>click to expand/collapse</summary>
+
+```java
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+public class GroupingByExample {
+  //group by gender
+  private static Map<String, List<Student>> groupingByGender() {
+    return Student.getAllStudents()
+            .stream()
+            .collect(Collectors.groupingBy(Student::getGender));
+  }
+
+  //group by department
+  private static Map<String, List<Student>> groupingByDepartment() {
+    return Student.getAllStudents()
+            .stream()
+            .collect(Collectors.groupingBy(Student::getDepartment));
+  }
+
+  private static void printStudents(Map<String, List<Student>> groupedMap){
+    // Printing the groups
+    groupedMap.forEach((k,v)->{
+      List<String> studentNames = v.stream().map(Student::getName).collect(Collectors.toList());
+      System.out.println(k+" : "+studentNames);});
+  }
+  public static void main(String[] args) {
+    System.out.println("Grouped by gender: ");
+    Map<String, List<Student>> genderGrouped = groupingByGender();
+    printStudents(genderGrouped);
+
+    System.out.println();
+    System.out.println("Grouped by department: ");
+    Map<String,List<Student>> deptGrouped = groupingByDepartment();
+    printStudents(deptGrouped);
+  }
+}
+```
+Output:
+```shell
+Grouped by gender: 
+Female : [Isha, Ishita, Sia, Nisha, Kavya, Anika, Neha, Tanvi, Diya, Prachi, Diya]
+Male : [Aarav, Rohan, Sahil, Rohan, Rishi, Aryan, Aryan, Ved, Varun, Arjun, Karan, Ravi, Raj, Rahul]
+
+Grouped by department: 
+Civil Engineering : [Arjun, Kavya, Karan, Anika]
+Computer Science : [Aarav, Rohan, Isha, Ishita, Sahil]
+Electronics and Communication Engineering : [Raj, Rahul, Prachi, Diya]
+Mechanical Engineering : [Rohan, Sia, Rishi, Aryan, Diya]
+Information Technology : [Neha, Ravi, Tanvi]
+Electrical Engineering : [Aryan, Ved, Varun, Nisha]
+```
+</details>
+
+### Collectors.groupingBy() with two attributes (classification function and downstream collector)
+
+`public static <T,K,A,D> Collector<T,?,Map<K,D>> groupingBy(Function<? super T,? extends K> classifier,Collector<? super T,A,D> downstream)`
+
+In addition to the classifier function, this version takes a downstream collector that defines how the elements within each group should be collected or processed further.
+
+- When just grouping isn't quite enough - you can also supply a downstream collector to the groupingBy() method
+- This method returns a Collector that groups the input elements of type T according to the classification function,
+  afterwards applying a reduction operation on the values associated with a given key using the specified downstream Collector.
+- It takes two parameters
+  - A mapper - a function to be applied to the input elements and map them // It also defines the keys for the resulting map.
+  - A downstream collector – a collector which will accept mapped values and accumulate it // second argument can be of any type of collector
+
+[Example: groupingBy(classificationFn, downstreamCollector)](./GroupingByExample2.java)
+<details>
+  <summary>click to expand/collapse</summary>
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+public class GroupingByExample2 {
+  //group by gender and then accumulate student in Set
+  //1st arg of collect() : defines key to map
+  //2nd arg of collect(): defines how values will be accumulated
+  private static Map<String, Set<Student>> groupingByGender() {
+    return Student.getAllStudents()
+            .stream()
+            .collect(Collectors.groupingBy(Student::getGender,Collectors.toSet()));
+  }
+
+  //group by department then accumulate data in map in form of name:gender (key,value) pair
+  private static Map<String, Map<Integer,String>> deptRollNameMap() {
+    return Student.getAllStudents()
+            .stream()
+            .collect(Collectors.groupingBy(Student::getDepartment,Collectors.toMap(Student::getRollNo,Student::getName)));
+  }
+
+  //group by gender then perform count on accumulation of grouped data
+  private static Map<String,Long> genderCountMap() {
+    return Student.getAllStudents()
+            .stream()
+            .collect(Collectors.groupingBy(Student::getGender,Collectors.counting()));
+  }
+  public static void main(String[] args) {
+    System.out.println("Set of Students grouped by gender: ");
+    groupingByGender().forEach(
+            (key, value) -> {
+              Set studentNames = value.stream().map(Student::getName).collect(Collectors.toSet());
+              System.out.println(key + " : " + studentNames);
+            }
+    );
+    System.out.println();
+    System.out.println("{Department : {Roll : Name}} Map \n"+deptRollNameMap());
+    System.out.println();
+    System.out.println("Gender Count Map: \n"+genderCountMap());
+
+  }
+}
+```
+Output:
+```shell
+Set of Students grouped by gender: 
+Female : [Isha, Prachi, Neha, Anika, Kavya, Tanvi, Sia, Diya, Nisha, Ishita]
+Male : [Rahul, Sahil, Ved, Ravi, Aarav, Karan, Varun, Rishi, Raj, Arjun, Aryan, Rohan]
+
+{Department : {Roll : Name}} Map 
+{Civil Engineering={401=Arjun, 402=Kavya, 403=Karan, 404=Anika}, Computer Science={101=Aarav, 102=Rohan, 103=Isha, 104=Ishita, 105=Sahil}, Electronics and Communication Engineering={601=Raj, 602=Rahul, 603=Prachi, 604=Diya}, Mechanical Engineering={504=Diya, 201=Rohan, 202=Sia, 203=Rishi, 204=Aryan}, Information Technology={501=Neha, 502=Ravi, 503=Tanvi}, Electrical Engineering={304=Nisha, 301=Aryan, 302=Ved, 303=Varun}}
+
+Gender Count Map: 
+{Female=11, Male=14}
+```
+</details>
+
+### Collectors.groupingBy() with a Classification Function, Downstream Collector and Supplier
+```java
+    public static <T,K,D,A,M extends Map<K,D>> Collector<T,?,M>
+               groupingBy(Function<? super T,? extends K> classifier,
+               Supplier<M> mapFactory,
+               Collector<? super T,A,D> downstream)
+```
+
+- The third and final overloaded groupingBy() method variant takes the same two parameters as before,
+  but with the addition of one more - a supplier mapFactory.
+
+- This method provides the specific Map implementation we want to use to contain our end result. The default one other two
+overloaded versions was HashMap.
+- This implementation differs from the previous one only slightly.
+- It returns a Collector that groups the input elements of type T according to the classification function,
+  afterwards applying a reduction operation on the values associated with a given key using the specified downstream Collector.
+  Meanwhile, the Map is implemented using the supplied mapFactory supplier.
+- This differs from previous in just one sense, in the previous method HashMap was being supplied by default to contain end result
+  but, here in the custom Map implementation will be provided.
+
+[Example: groupingBy(classifierFn, mapFactory, downstreamCollector)](./GroupingByExample3.java)
+<details>
+  <summary>lick to expand/collapse</summary>
+
+```java
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class GroupingByExample {
+  private static LinkedHashMap<String, List<String>> genderStudentNameMap(){
+    return Student.getAllStudents()
+            .stream()
+            .collect(Collectors.groupingBy(
+                    Student::getGender,
+                    LinkedHashMap::new,
+                    Collectors.mapping(Student::getName,Collectors.toList()
+                    )));
+  }
+  public static void main(String[] args) {
+    System.out.println("Gender Name Map: "+genderStudentNameMap());
+  }
+}
+```
+Output:
+```shell
+Gender Name Map: {Male=[Aarav, Rohan, Sahil, Rohan, Rishi, Aryan, Aryan, Ved, Varun, Arjun, Karan, Ravi, Raj, Rahul], Female=[Isha, Ishita, Sia, Nisha, Kavya, Anika, Neha, Tanvi, Diya, Prachi, Diya]}
+```
+</details>
