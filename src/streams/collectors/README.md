@@ -451,3 +451,50 @@ Sum: 15
 ```
 summingLong and summingDouble collectors can be used in a similar way to calculate the sum of long and double values, respectively.
 </details>
+
+### averagingInt, averagingLong, averagingDouble
+
+- The averagingInt, averagingLong and averagingDouble methods in the Collectors class are used to calculate the average of numeric values in a stream.
+- The collector takes a mapping function that extracts an int/long/double primitive value from each element of the stream,
+    and returns the average (double value) of those extracted values.
+- Returns a Collector that produces the arithmetic mean of a values obtained from the function applied to the input elements.
+- If no elements are present, the result is 0.
+
+### `public static <T> Collector<T,?,Double> averagingInt(ToIntFunction<? super T> mapper)`
+
+### `public static <T> Collector<T,?,Double> averagingLong(ToLongFunction<? super T> mapper)`
+
+### `public static <T> Collector<T,?,Double> averagingDouble(ToDoubleFunction<? super T> mapper)`
+
+[Example](./AveragingIntExample.java)
+<details>
+  <summary>click to expand/collapse</summary>
+
+```java
+package streams.collectors;
+
+/*
+ * Example demonstrating Collectors method: averagingInt
+ */
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class AveragingIntExample {
+    public static void main(String[] args) {
+        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+
+        Double average = numbers.stream()
+                .collect(Collectors.averagingInt(Integer::intValue));
+
+        System.out.println("Average: " + average);
+    }
+}
+```
+Output:
+```shell
+Average: 3.0
+```
+averagingLong and averagingDouble collectors can be used in a similar way to calculate the average of long and double values, respectively.
+</details>
