@@ -283,3 +283,58 @@ Output:
 No. of CSE students: 5
 ```
 </details>
+
+### mapping
+
+`public static <T,U,A,R> Collector<T,?,R> mapping(Function<? super T,? extends U> mapper,Collector<? super U,A,R> downstream)`
+
+- used to transform the elements of a stream before collecting them into a collection or performing other operations. 
+- It allows you to apply a mapping function to the stream elements and collect the results into a collection or perform additional operations on the mapped values
+- The mapping function takes two parameters:
+  - mapper: The first parameter is a function that maps the original elements of the stream to another type. This function is applied to each element of the stream.
+  - downstream: The second parameter is a downstream collector that specifies how the mapped values should be collected or further processed.
+    It is another collector that defines how the mapped values should be collected or processed further. It can be any valid collector from the **Collectors** class.
+
+[Example: mapping](./MappingExample.java)
+<details>
+  <summary>click to expand/collapse</summary>
+
+```java
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+public class MappingExample {
+    public static void main(String[] args) {
+
+        Set<String> namesSet = Student.getAllStudents()
+                .stream()
+                .collect(Collectors.mapping(Student::getName,Collectors.toSet()));
+        /*
+         * Equivalent to:
+         * Student.getAllStudents().stream()
+         *  .map(Student::getName)
+         *  .collect(Collectors.toSet());
+         */
+
+        List<String> namesList = Student.getAllStudents()
+                .stream()
+                .collect(Collectors.mapping(Student::getName,Collectors.toList()));
+        /*
+         * Equivalent to:
+         * Student.getAllStudents().stream()
+         *  .map(Student::getName)
+         *  .collect(Collectors.toList());
+         */
+
+        System.out.println("Names Set: "+namesSet);
+        System.out.println("Names List: "+namesList);
+    }
+}
+```
+Output:
+```shell
+Names Set: [Isha, Rahul, Sahil, Ravi, Aarav, Kavya, Karan, Rishi, Varun, Sia, Nisha, Diya, Rohan, Ishita, Prachi, Ved, Neha, Anika, Tanvi, Raj, Arjun, Aryan]
+Names List: [Aarav, Rohan, Isha, Ishita, Sahil, Rohan, Sia, Rishi, Aryan, Aryan, Ved, Varun, Nisha, Arjun, Kavya, Karan, Anika, Neha, Ravi, Tanvi, Diya, Raj, Rahul, Prachi, Diya]
+```
+</details>
