@@ -404,3 +404,50 @@ Max element in list: 10
 Min element in list: 1
 ```
 </details>
+
+### summingInt, summingLong, summingDouble
+
+- The summingInt, summingLong, and summingDouble methods in the Collectors class are used to calculate the sum of numeric values in a stream.
+- Returns a Collector that produces the sum of values obtained from the mapper function applied to the input elements.
+- The collector takes a mapping function that extracts an int/long/double primitive value from each element of the stream, 
+and returns the sum of those extracted values.
+- If no elements are present, the result is 0.
+
+`public static <T> Collector<T,?,Integer> summingInt(ToIntFunction<? super T> mapper)`
+
+`public static <T> Collector<T,?,Long> summingLong(ToLongFunction<? super T> mapper)`
+
+`public static <T> Collector<T,?,Double> summingDouble(ToDoubleFunction<? super T> mapper)`
+
+[Example: summingInt](./SummingIntExample.java)
+<details>
+  <summary>click to expand/collapse</summary>
+
+```java
+package streams.collectors;
+
+/*
+ * Example demonstrating Collectors method: summingInt
+ */
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class SummingIntExample {
+    public static void main(String[] args) {
+        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+
+        int sum = numbers.stream()
+                .collect(Collectors.summingInt(Integer::intValue));
+
+        System.out.println("Sum: " + sum);
+    }
+}
+```
+Output:
+```shell
+Sum: 15
+```
+summingLong and summingDouble collectors can be used in a similar way to calculate the sum of long and double values, respectively.
+</details>
