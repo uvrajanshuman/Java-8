@@ -300,3 +300,42 @@ Output:
 
 Note:<br>
 \<primitive> refers to the respective primitive type: int, long, or double.
+
+### Numeric Stream - Boxing and UnBoxing
+
+- Boxing: converting a primitive type to wrapper class type.
+    - Ex: int to Integer
+    - `boxed()`
+- UnBoxing: converting a wrapper class type to primitive type.
+    - Ex: Integer to int
+
+```java
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+public class App {
+
+    // Primitive to wrapper
+    private static List<Integer> boxing() {
+        List<Integer> integerList = IntStream
+                .rangeClosed(1, 10) // IntStream of 10 elements
+                .boxed() // int -> Integer
+                .collect(Collectors.toList());
+        
+        return  integerList;
+    }
+
+    // Wrapper to primitive
+    private static int unBoxing(List<Integer> integerList){
+        return integerList.stream()
+                .mapToInt(Integer::intValue) // IntStream(intValue of wrapper class)
+                .sum();
+    }
+    
+    public static void main(String[] args) {
+        System.out.println("Boxing: "+boxing()); // [1,2,3,4,5,6,7,8,9,10]
+        List<Integer> integerList = boxing();
+        System.out.println("Unboxing: "+unBoxing(integerList)); // 55
+    }
+}
+```
