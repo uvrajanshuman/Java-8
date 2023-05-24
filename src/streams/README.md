@@ -1291,3 +1291,15 @@ Find Any: Rishi
 
 [Collectors](./collectors/README.md) is the implementation of **Collector** interface that provides various useful 
 reduction operations, such as accumulating elements into collections, summarizing elements according to various criteria, etc.
+
+[Collectors](./collectors/README.md)
+
+## Numeric Streams
+
+[Numeric streams](numeric_streams/README.md) (IntStream, LongStream, DoubleStream) are specialized stream designed specifically for
+working with primitive numeric types (int, long, double).
+
+They provide a set of operations and methods optimized for numerical computations, offering improved performance and
+convenience when dealing with numeric data.
+
+[Numeric streams](numeric_streams/README.md)
