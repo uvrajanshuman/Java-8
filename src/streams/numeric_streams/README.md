@@ -137,3 +137,43 @@ IntStream.range(1,50).asDoubleStream() : 1.0 2.0 3.0 4.0 5.0
 DoubleStream.iterate(0.0, n -> n + 0.5).limit(5) : 0.0 0.5 1.0 1.5 2.0 
 ```
 </details>
+
+### Numeric Stream - Aggregate Functions.
+
+Numeric streams provide a set of aggregate functions that allows to perform calculations and obtain aggregate results on numeric data. <br>
+These aggregate functions are specifically designed for numeric types (int, long, double) and are available in the IntStream, LongStream, and DoubleStream classes.
+
+1. `sum()`
+
+```java
+// sum of integers in IntStream
+int sum = IntStream.rangeClosed(1,5).sum();
+System.out.println(sum); //10
+```
+
+2. `max()`
+
+```java
+// max integers in IntStream
+OptionalInt maxNo = IntStream.of(5,3,9,1,7).max(); 
+if(maxNo.isPresent())
+    System.out.println(maxNo.getAsInt()); //9
+```
+
+#### min()
+
+```java
+// min integers in IntStream
+OptionalInt minNo = IntStream.rangeClosed(1,50).min(); //1
+if(maxNo.isPresent())
+    System.out.println(maxNo.getAsInt()); // 1
+```
+
+#### average()
+
+```java
+// max integers in IntStream
+OptionalDouble avg = IntStream.rangeClosed(1,5).average;
+System.out.println(avg.isPresent()?avg.getAsDouble():0); //3.0
+```
+> Above operations can also be performed on LongStream and DoubleStream.
