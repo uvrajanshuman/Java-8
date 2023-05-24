@@ -70,7 +70,7 @@ Numeric streams (IntStream, LongStream, DoubleStream) provide methods to generat
     - Ex: `IntStream.generate(1, n -> n<=10, n -> n+2)` generates an infinite stream of odd numbers starting from 1 and stopping
    when the number exceeds 10.
 
-Note:
+Note:<br>
 DoubleStream does not support the range() and rangeClosed().<br>
 But IntStream and LongStream can be converted into double stream using `asDoubleStream()` method.
   Ex:<br>
@@ -177,3 +177,126 @@ OptionalDouble avg = IntStream.rangeClosed(1,5).average;
 System.out.println(avg.isPresent()?avg.getAsDouble():0); //3.0
 ```
 > Above operations can also be performed on LongStream and DoubleStream.
+
+
+### Numeric Steam - Mapping Functions
+
+These mapping functions work same like the [`map`](../README.md#map) method of normal stream.
+And is used to transform elements of stream from one type to another. The primitive versions are more efficient and optimized
+for numeric values. so, should be preferred over noram map method of stream in case of primitives.
+
+Certainly! Here are the revised summaries of the mapping functions of numeric streams with examples:
+
+1. `mapToObj()`:
+    - Available in: IntStream, LongStream, DoubleStream
+    - Syntax: `<U> Stream<U> mapToObj(<primitive>ToObjFunction<? super T, ? extends U> mapper)`
+    - Parameter:
+        - `mapper`: A functional interface that accepts a primitive value and returns an object of type `U`.
+    - Return Type: `Stream<U>`
+    - Description: Maps each element of the numeric stream to an object of a different type using the provided mapping function.
+
+   Example (mapToObj()):
+   ```java
+   IntStream.rangeClosed(1, 5)
+            .mapToObj(i -> "Number " + i)
+            .forEach(System.out::println);
+   ```
+   Output:
+   ```shell
+   Number 1
+   Number 2
+   Number 3
+   Number 4
+   Number 5
+   ```
+
+2. `mapToInt()`:
+    - Available in: Stream, LongStream, DoubleStream
+    - Syntax: `IntStream mapToInt(<primitive>ToIntFunction<? super T> mapper)`
+    - Parameter:
+        - `mapper`: A functional interface that accepts an element of type `T` and returns an `int` value.
+    - Return Type: `IntStream`
+    - Description: Maps each element of the stream to an `int` value using the provided mapping function.
+
+   Example (mapToInt()):
+   ```java
+   Stream.of("apple", "banana", "cherry")
+         .mapToInt(String::length)
+         .forEach(System.out::println);
+   ```
+   Output:
+   ```
+   5
+   6
+   6
+   ```
+
+3. `mapToLong()`:
+    - Available in: Stream, IntStream, DoubleStream
+    - Syntax: `LongStream mapToLong(<primitive>ToLongFunction<? super T> mapper)`
+    - Parameter:
+        - `mapper`: A functional interface that accepts an element of type `T` and returns a `long` value.
+    - Return Type: `LongStream`
+    - Description: Maps each element of the stream to a `long` value using the provided mapping function.
+
+   Example (mapToLong()):
+   ```java
+   DoubleStream.of(1.5, 2.5, 3.5)
+               .mapToLong(value -> (long) value)
+               .forEach(System.out::println);
+   ```
+   Output:
+   ```shell
+   1
+   2
+   3
+   ```
+
+4. `mapToDouble()`:
+    - Available in: Stream, IntStream, LongStream
+    - Syntax: `DoubleStream mapToDouble(<primitive>ToDoubleFunction<? super T> mapper)`
+    - Parameter:
+        - `mapper`: A functional interface that accepts an element of type `T` and returns a `double` value.
+    - Return Type: `DoubleStream`
+    - Description: Maps each element of the stream to a `double` value using the provided mapping function.
+
+   Example (mapToDouble()):
+   ```java
+   LongStream.rangeClosed(1, 5)
+             .mapToDouble(value -> Math.sqrt(value))
+             .forEach(System.out::println);
+   ```
+   Output:
+   ```
+   1.0
+   1.4142135623730951
+   1.7320508075688772
+   2.0
+   2.23606797749979
+   ```
+
+5. `map()`:
+    - Available in: Stream, IntStream, LongStream, DoubleStream
+    - Syntax: `<U> Stream<U> map(<primitive>Function<? super T, ? extends U> mapper)`
+- Parameter:
+    - `mapper`: A functional interface that accepts an element of type `T` and returns an element of type `U`.
+- Return Type: `Stream<U>`
+- Description: Maps each element of the stream to a new element using the provided mapping function.
+
+Example (map()):
+   ```java
+   IntStream.range(1, 6)
+            .map(i -> i * 2)
+            .forEach(System.out::println);
+   ```
+Output:
+   ```
+   2
+   4
+   6
+   8
+   10
+   ```
+
+Note:<br>
+\<primitive> refers to the respective primitive type: int, long, or double.
