@@ -51,3 +51,89 @@ We can then perform the square calculation using map(), followed by the sum() me
 By using the IntStream and avoiding the unnecessary boxing and unboxing, we achieve a more efficient solution for performing numerical computations. 
 Numeric streams like IntStream provide specialized operations that eliminate the overhead of working with boxed objects, 
 making them ideal for numerical calculations.
+
+## Numeric Stream Operations:
+
+### Numeric Stream - Ranges
+
+Numeric streams (IntStream, LongStream, DoubleStream) provide methods to generate a sequence of consecutive numbers within a specific range.
+
+1. `range(start, end)`
+    - Generates a sequential range of numbers from starting value (inclusive) to the ending value (exclusive).
+    - Ex: `IntStream.range(1,50)` returns an IntStream of 49 elements from 1 to 49.
+2. `rangeClosed(start, end)`
+    - Similar to `range()`, generates a range of numbers from starting value (inclusive) to the ending value (inclusive) 
+    - Ex: `IntStream.rangeClosed(1,50)` returns an IntStream of 50 elements from 1 to 50.
+3. `iterate(seed, condition, operator)`
+    - Generates an infinite stream of numbers starting from the seed value, with subsequent values computed based on the given
+   condition and operator. The condition specifies when to stop generating numbers.
+    - Ex: `IntStream.generate(1, n -> n<=10, n -> n+2)` generates an infinite stream of odd numbers starting from 1 and stopping
+   when the number exceeds 10.
+
+Note:
+DoubleStream does not support the range() and rangeClosed().<br>
+But IntStream and LongStream can be converted into double stream using `asDoubleStream()` method.
+  Ex:<br>
+  `DoubleStream doubleStream = IntStream.range(1,50).asDoubleStream();`
+
+[Example: Numeric stream - ranges](./RangesExample.java)
+
+<details>
+  <summary>click to expand/collapse</summary>
+
+```java
+import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
+
+public class RangesExample {
+    public static void main(String[] args) {
+        // range(start, end)
+        System.out.print("IntStream.range(1,6) : ");
+        IntStream.range(1, 6)
+                .forEach(i -> System.out.print(i +" ")); // 1 2 3 4 5
+        System.out.println();
+
+        // rangeClosed(start, end)
+        System.out.print("IntStream.rangeClosed(1,5) : ");
+        IntStream.rangeClosed(1, 5)
+                .forEach(i -> System.out.print(i +" ")); // 1 2 3 4 5
+        System.out.println();
+
+        // range(start, end)
+        System.out.print("LongStream.range(1L,6L) : ");
+        LongStream.range(1L, 6L)
+                .forEach(i -> System.out.print(i +" ")); // 1 2 3 4 5
+        System.out.println();
+
+        // rangeClosed(start, end)
+        System.out.print("LongStream.rangeClosed(1L,5L) : ");
+        LongStream.rangeClosed(1L, 5L)
+                .forEach(i -> System.out.print(i +" ")); // 1 2 3 4 5
+        System.out.println();
+
+        //DoubleStream does not directly support range() or rangeClosed()
+        System.out.print("IntStream.range(1,50).asDoubleStream() : ");
+        IntStream.range(1,6).asDoubleStream()
+                .forEach(i -> System.out.print(i +" ")); // 1.0 2.0 3.0 4.0 5.0
+        System.out.println();
+
+        // range using iterate and limit
+        System.out.print("DoubleStream.iterate(0.0, n -> n + 0.5).limit(5) : ");
+        DoubleStream.iterate(0.0, n -> n + 0.5)
+                .limit(5)
+                .forEach(i -> System.out.print(i +" ")); // 0.0 0.5 1.0 1.5 2.0
+
+    }
+}
+```
+Output:
+```shell
+IntStream.range(1,6) : 1 2 3 4 5 
+IntStream.rangeClosed(1,5) : 1 2 3 4 5 
+LongStream.range(1L,6L) : 1 2 3 4 5 
+LongStream.rangeClosed(1L,5L) : 1 2 3 4 5 
+IntStream.range(1,50).asDoubleStream() : 1.0 2.0 3.0 4.0 5.0 
+DoubleStream.iterate(0.0, n -> n + 0.5).limit(5) : 0.0 0.5 1.0 1.5 2.0 
+```
+</details>
