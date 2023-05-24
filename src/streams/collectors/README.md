@@ -703,3 +703,85 @@ Output:
 Gender Name Map: {Male=[Aarav, Rohan, Sahil, Rohan, Rishi, Aryan, Aryan, Ved, Varun, Arjun, Karan, Ravi, Raj, Rahul], Female=[Isha, Ishita, Sia, Nisha, Kavya, Anika, Neha, Tanvi, Diya, Prachi, Diya]}
 ```
 </details>
+
+## partitioningBy
+
+- similar to groupingBy
+- Return type of the collector is going to be Map<K,V>
+- paritioningBy() accepts a predicate as an input.
+- The key of the return type is going to be a Boolean.
+- partitioningBy has two overloaded versions.
+
+### Collectors.partitioningBy() using a Predicate
+### `public static <T> Collector<T,?,Map<Boolean,List<T>>> partitioningBy(Predicate<? super T> predicate)`
+
+- Returns a Collector which partitions the input elements according to a Predicate,
+  and organizes them into a Map<Boolean, List<T>>
+- Each of the elements from the Stream are tested against the predicate, and based on the resulting boolean value,
+  this Collector groups the elements into two sets and returns the result as Map<Boolean, List<T>>.
+- The key of the return type is going to be a Boolean.
+
+### Collectors.partitioningBy() using a Predicate and a Downstream Collector
+
+`public static <T,D,A> Collector<T,?,Map<Boolean,D>> partitioningBy(Predicate<? super T> predicate,Collector<? super T,A,D> downstream)`
+
+- Returns a Collector which partitions the input elements according to a Predicate, reduces the values in
+  each partition according to another Collector, and organizes them into a Map<Boolean, D>
+  whose values are the result of the downstream reduction.
+- downstream : could be of any collector
+
+[Example: partitionBy](./PartitionByExample.java)
+
+<details>
+  <summary>click to expand/collapse</summary>
+
+```java
+import java.util.List;
+import java.util.Map;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+public class PartitionByExample {
+
+    private static Predicate<Student> csePredicate = student -> student.getDepartment().equals("Computer Science");
+
+    private static Map<Boolean, List<Student>> oneArgPartitioningBy() {
+        return Student.getAllStudents()
+                .stream()
+                .collect(Collectors.partitioningBy(csePredicate));
+    }
+
+    private static Map<Boolean, List<String>> twoArgPartitioningBy() {
+        return Student.getAllStudents()
+                .stream()
+                .collect(Collectors.partitioningBy(
+                        csePredicate,
+                        Collectors.mapping(Student::getName, Collectors.toList()
+                        )));
+    }
+
+    public static void main(String[] args) {
+        System.out.println("PartitionByGrade: ");
+        oneArgPartitioningBy().forEach(
+                (key, value) -> {
+                    List<String> studentNames = value.stream().map(Student::getName).collect(Collectors.toList());
+                    System.out.println(key + " : " + studentNames);
+                }
+        );
+        System.out.println();
+        System.out.println("PartitionByGrade StudentName Map:");
+        twoArgPartitioningBy().forEach((key, value) -> {System.out.println(key+" : "+value);});
+    }
+}
+```
+Output:
+```shell
+PartitionByGrade: 
+false : [Rohan, Sia, Rishi, Aryan, Aryan, Ved, Varun, Nisha, Arjun, Kavya, Karan, Anika, Neha, Ravi, Tanvi, Diya, Raj, Rahul, Prachi, Diya]
+true : [Aarav, Rohan, Isha, Ishita, Sahil]
+
+PartitionByGrade StudentName Map:
+false : [Rohan, Sia, Rishi, Aryan, Aryan, Ved, Varun, Nisha, Arjun, Kavya, Karan, Anika, Neha, Ravi, Tanvi, Diya, Raj, Rahul, Prachi, Diya]
+true : [Aarav, Rohan, Isha, Ishita, Sahil]
+```
+</details>
