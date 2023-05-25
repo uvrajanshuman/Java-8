@@ -1303,3 +1303,13 @@ They provide a set of operations and methods optimized for numerical computation
 convenience when dealing with numeric data.
 
 [Numeric streams](numeric_streams/README.md)
+
+## Parallel Streams
+
+One of the enhancements that came with streams was the ability to execute operations in parallel, known as Parallel Streams.
+
+[Parallel Streams](./parallel_streams/README.md) allows to perform stream operations concurrently on multiple threads, harnessing the full potential of multi-core processors. <br>
+While normal streams execute operations sequentially on a single thread, parallel streams divide the workload into smaller tasks and distribute them across multiple threads,
+leading to potentially significant performance improvements.
+
+[Parallel Streams](./parallel_streams/README.md)
